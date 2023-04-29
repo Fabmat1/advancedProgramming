@@ -23,26 +23,26 @@ int main() {
 
     // Define the distribution
     std::uniform_real_distribution<double> distr(0, 1.0);
-    __m256d r_squared = _mm256_set1_pd(std::pow(0.5, 2));
+    __m512d r_squared = _mm512_set1_pd(std::pow(0.5, 2));
 
     // Parallelize for loop execution (Use all CPU Cores)
     #pragma omp parallel for reduction(+: N_i)
-    for  (int i = 0; i < N; i += 4) {
+    for  (int i = 0; i < N; i += 8) {
         // I <3 vectorization!
-        // Generate batches of 4 random doubles and substract 0.5
-        __m256d x_values = _mm256_sub_pd(_mm256_set_pd(distr(eng), distr(eng), distr(eng), distr(eng)), _mm256_set1_pd(0.5));
-        __m256d y_values = _mm256_sub_pd(_mm256_set_pd(distr(eng), distr(eng), distr(eng), distr(eng)), _mm256_set1_pd(0.5));
+        // Generate batches of 8 random doubles and substract 0.5
+        __m512d x_values = _mm512_sub_pd(_mm512_set_pd(distr(eng), distr(eng), distr(eng), distr(eng), distr(eng), distr(eng), distr(eng), distr(eng)), _mm512_set1_pd(0.5));
+        __m512d y_values = _mm512_sub_pd(_mm512_set_pd(distr(eng), distr(eng), distr(eng), distr(eng), distr(eng), distr(eng), distr(eng), distr(eng)), _mm512_set1_pd(0.5));
 
         // square the values
-        __m256d x_squared = _mm256_mul_pd(x_values, x_values);
-        __m256d y_squared = _mm256_mul_pd(y_values, y_values);
+        __m512d x_squared = _mm512_mul_pd(x_values, x_values);
+        __m512d y_squared = _mm512_mul_pd(y_values, y_values);
 
         // Sum the squares and determine if inside circle
-        __m256d sum_squared = _mm256_add_pd(x_squared, y_squared);
-        __m256d inside = _mm256_cmp_pd(sum_squared, r_squared, _CMP_LT_OQ);
+        __m512d sum_squared = _mm512_add_pd(x_squared, y_squared);
+        __mmask8 inside = _mm512_cmp_pd_mask(sum_squared, r_squared, _MM_CMPINT_LT);
 
         // Keep track of the amount inside the circle
-        N_i += _mm_popcnt_u32(_mm256_movemask_pd(inside));
+        N_i += _mm_popcnt_u64(inside);
     }
 
     double fraction =  static_cast<double>(N_i)/static_cast<double>(N);
