@@ -45,12 +45,11 @@ ax[0].set_ylabel("y")
 ax[1].set_ylabel("z")
 ax[2].set_ylabel("z")
 
-
 cax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
 
 # Sqrt normalization
-norm = mpl.colors.PowerNorm(1/2, vmin=np.min(np.concatenate([h0[0].flatten(), h1[0].flatten(), h2[0].flatten()])),
-                          vmax=np.max(np.concatenate([h0[0].flatten(), h1[0].flatten(), h2[0].flatten()])))
+norm = mpl.colors.PowerNorm(1 / 2, vmin=np.min(np.concatenate([h0[0].flatten(), h1[0].flatten(), h2[0].flatten()])),
+                            vmax=np.max(np.concatenate([h0[0].flatten(), h1[0].flatten(), h2[0].flatten()])))
 
 h0[3].norm = norm
 h1[3].norm = norm
@@ -60,7 +59,6 @@ for a in ax:
     a.set_aspect("equal", adjustable='box')
     a.set_xlim(-300, 300)
     a.set_ylim(-300, 300)
-
 
 fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap="viridis"),
              cax=cax, label='$M_{\odot}$kpc$^{-2}$')
