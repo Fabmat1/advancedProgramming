@@ -7,3 +7,4 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/output )
 set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/output )
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/Ex1" "${PROJECT_SOURCE_DIR}/Ex1/Ex1_output")
+add_subdirectory("${PROJECT_SOURCE_DIR}/Bonus_DM" "${PROJECT_SOURCE_DIR}/Bonus_DM/Bonus_DM_output")

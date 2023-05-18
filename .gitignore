@@ -10,3 +10,4 @@ Makefile
 *.zip
 *.pdf
 output/*
+*.txt
