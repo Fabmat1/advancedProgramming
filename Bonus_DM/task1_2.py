@@ -18,7 +18,7 @@ galaxypos = np.array(galaxypos)
 
 # Task 1 & 2
 arr = np.loadtxt(
-    r"GalaxyFromIllustrisTNG50Dark_DM_Subhalo852966.txt"
+    r"../GalaxyFromIllustrisTNG50Dark_DM_Subhalo852966.txt"
 )
 
 pos = arr[:, 0:3]
