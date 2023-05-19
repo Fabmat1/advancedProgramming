@@ -36,3 +36,12 @@ The target names and their functions for each project are found below.
 
 * ```quickpi``` - Script for computing pi with AVX-2 instructions and multiprocessing
 * ```quickpi_512``` - Script for computing pi with AVX-512 instructions and multiprocessing **only works on compatible CPUs!**
+
+#### Dark Matter Bonus Exercise
+
+This consists of three files: Two python files and one C++ file. Instructions on reconstructing the exercise are:
+
+* Move the ```GalaxyFromIllustrisTNG50Dark_DM_Subhalo852966.txt``` file into the ```Bonus_DM``` directory 
+* Run ```task_1_2_8.py``` to make the plot for tasks 1,2 and 8. The result for task 8 is calculated later, but the result is hardcoded into ```task_1_2_8.py``` to avoid repetition.
+* Make the target ```bonus_DM``` and run it
+* Run ```task3ff.py``` to make neccessary calculations for task 3 through 7
