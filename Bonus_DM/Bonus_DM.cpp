@@ -113,9 +113,11 @@ void save_file(vector<double> vector1, vector<double> vector2, vector<double> ve
 
 
 int main() {
+    cout << "Reading File..." << endl;
     vector<double> x, y, z, m;
-    tie(x, y, z, m) = readDataFromFile("../GalaxyFromIllustrisTNG50Dark_DM_Subhalo852966.txt", " ");
+    tie(x, y, z, m) = readDataFromFile("../Bonus_DM/GalaxyFromIllustrisTNG50Dark_DM_Subhalo852966.txt", " ");
 
+    cout << "Calculating..." << endl;
     vector<double> r;
     r = generate_linspace(40, 0., 300.);
 
@@ -127,6 +129,8 @@ int main() {
     for (int i = 0; i < r.size(); ++i) {
         densities[i] = masses[i]/volumes[i];
     }
+
+    cout << "Saving Output..." << endl;
 
     save_file(r, masses, volumes, densities, "DM_output.txt");
 
