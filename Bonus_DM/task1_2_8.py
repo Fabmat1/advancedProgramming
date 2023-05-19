@@ -55,7 +55,6 @@ h0[3].norm = norm
 h1[3].norm = norm
 h2[3].norm = norm
 
-
 for a in ax:
     # Calculated in task3ff.py
     r200circle = patches.Circle((0, 0), radius=117.05, edgecolor='lime', facecolor='none', linestyle="--")
@@ -64,8 +63,7 @@ for a in ax:
     a.set_ylim(-300, 300)
     a.add_patch(r200circle)
 
-fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap="viridis"),
-             cax=cax, label='$M_{\odot}$kpc$^{-2}$')
+fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap="viridis"), cax=cax, label=r'$M_{\odot}$kpc$^{-2}$')
 
 plt.savefig("task_1_2_8_plot.png", dpi=500)
 plt.show()

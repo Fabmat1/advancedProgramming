@@ -27,6 +27,7 @@ plt.xlabel("Radius $r$ [kpc]")
 plt.ylabel(r"Density $\rho$ $\left[\frac{g}{cm^3}\right]$")
 plt.legend([r"Density $\rho$", r"$200\rho_{crit}$"])
 plt.tight_layout()
+plt.savefig("task45.pdf")
 plt.show()
 
 cumulative_mass = np.array([np.sum(m[:i+1]) for i in range(len(m))])
@@ -38,6 +39,7 @@ plt.title("Plot representing task 6")
 plt.xlabel("Radius $r$ [kpc]")
 plt.ylabel(r"Cumulative mass inside radius $M_{tot}$ [$M_{\odot}$]")
 plt.tight_layout()
+plt.savefig("task6.pdf")
 plt.show()
 
 # Linearly interpolate for R200
