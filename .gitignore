@@ -11,3 +11,4 @@ Makefile
 *.pdf
 output/*
 *.txt
+*.png

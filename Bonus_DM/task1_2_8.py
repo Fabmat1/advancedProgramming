@@ -1,5 +1,5 @@
 import numpy as np
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, patches
 import matplotlib as mpl
 
 galaxypos = [
@@ -37,7 +37,7 @@ ax[0].scatter(galaxypos[:, 0], galaxypos[:, 1], marker="x", c="red")
 ax[1].scatter(galaxypos[:, 0], galaxypos[:, 2], marker="x", c="red")
 ax[2].scatter(galaxypos[:, 1], galaxypos[:, 2], marker="x", c="red")
 
-fig.suptitle("Task 1 & 2: 2d slices of the dark matter density")
+fig.suptitle("Task 1, 2 & 8: 2d slices of the dark matter density")
 ax[0].set_xlabel("x")
 ax[1].set_xlabel("x")
 ax[2].set_xlabel("y")
@@ -55,12 +55,17 @@ h0[3].norm = norm
 h1[3].norm = norm
 h2[3].norm = norm
 
+
 for a in ax:
+    # Calculated in task3ff.py
+    r200circle = patches.Circle((0, 0), radius=117.05, edgecolor='lime', facecolor='none', linestyle="--")
     a.set_aspect("equal", adjustable='box')
     a.set_xlim(-300, 300)
     a.set_ylim(-300, 300)
+    a.add_patch(r200circle)
 
 fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap="viridis"),
              cax=cax, label='$M_{\odot}$kpc$^{-2}$')
 
+plt.savefig("task_1_2_8_plot.png", dpi=500)
 plt.show()
