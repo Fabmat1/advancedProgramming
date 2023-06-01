@@ -154,7 +154,7 @@ int main() {
 
     cout << "Calculating..." << endl;
     vector<double> r;
-    r = generate_linspace(40, 0., 300.);
+    r = generate_linspace(500, 0., 300.);
 
     vector<double> masses = mass_shells(x, y, z, m, r);
     vector<double> volumes = volume_shells(r);
