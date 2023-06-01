@@ -1,3 +1,4 @@
+import copy
 import numpy as np
 from matplotlib import pyplot as plt, patches
 import matplotlib as mpl
@@ -26,12 +27,16 @@ m = arr[:, 3]
 
 fig, ax = plt.subplots(1, 3, figsize=(15, 5))
 
+# Set "bad pixels", meaning pixels outside of the range of the normalization to be the 0 color of the colormap
+my_cmap = copy.copy(mpl.cm.get_cmap('viridis'))
+my_cmap.set_bad(my_cmap.colors[0])
+
 h0 = ax[0].hist2d(pos[:, 0], pos[:, 1], weights=m, bins=600, cmin=0, range=np.array([(-300, 300), (-300, 300)]),
-                  cmap="viridis")
+                  cmap=my_cmap)
 h1 = ax[1].hist2d(pos[:, 0], pos[:, 2], weights=m, bins=600, cmin=0, range=np.array([(-300, 300), (-300, 300)]),
-                  cmap="viridis")
+                  cmap=my_cmap)
 h2 = ax[2].hist2d(pos[:, 1], pos[:, 2], weights=m, bins=600, cmin=0, range=np.array([(-300, 300), (-300, 300)]),
-                  cmap="viridis")
+                  cmap=my_cmap)
 
 ax[0].scatter(galaxypos[:, 0], galaxypos[:, 1], marker="x", c="red")
 ax[1].scatter(galaxypos[:, 0], galaxypos[:, 2], marker="x", c="red")
@@ -47,14 +52,17 @@ ax[2].set_ylabel("z")
 
 cax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
 
-# Sqrt normalization
-norm = mpl.colors.PowerNorm(1 / 2, vmin=np.min(np.concatenate([h0[0].flatten(), h1[0].flatten(), h2[0].flatten()])),
-                            vmax=np.max(np.concatenate([h0[0].flatten(), h1[0].flatten(), h2[0].flatten()])))
+# Log normalization
+normmatrix = np.concatenate([h0[0].flatten(), h1[0].flatten(), h2[0].flatten()])
+norm = mpl.colors.LogNorm(vmin=np.min(normmatrix[normmatrix != 0]),
+                          vmax=np.max(normmatrix))
 
-h0[3].norm = norm
-h1[3].norm = norm
-h2[3].norm = norm
+# A loop. So space-efficient.
+for h in [h0, h1, h2]:
+    h[3].norm = norm
 
+
+# This is task 8. I do it in this script already so that i do not have to create anoter .py file
 for a in ax:
     # Calculated in task3ff.py
     r200circle = patches.Circle((0, 0), radius=117.05, edgecolor='lime', facecolor='none', linestyle="--")

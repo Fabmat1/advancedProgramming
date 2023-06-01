@@ -13,10 +13,12 @@ r = data[:, 0][1:]
 m = data[:, 1][1:]
 v = data[:, 2][1:]
 rho = data[:, 3][1:]
+rho_mean = data[:, 4][1:]
 
 # Rho is in units of M_sun/kpc^3 and needs to be converted to g/cm^3 to match Planck15.critical_density0
 conversion_factor = (u.M_sun / u.kpc**3).to(u.g / u.cm**3)
 rho = rho * conversion_factor
+rho_mean = rho_mean * conversion_factor
 
 plt.plot(r, rho, color="crimson", zorder=5)
 plt.axhline(rho200.value, linestyle="--", color="grey", zorder=1)
@@ -43,7 +45,7 @@ plt.savefig("task6.pdf")
 plt.show()
 
 # Linearly interpolate for R200
-interp_func = interp1d(rho, r[1:])
+interp_func = interp1d(rho_mean, r[1:])
 R200 = interp_func(rho200)
 interp_func = interp1d(r, cumulative_mass)
 M200 = interp_func(R200)

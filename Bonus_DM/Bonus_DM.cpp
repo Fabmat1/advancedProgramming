@@ -62,6 +62,27 @@ vector<double> generate_linspace(int length, double start, double end){
     return result;
 }
 
+// Numerical integration using the simpson method, with a factor 4*pi*r^2
+double simpson(vector<double> r,vector<double> rho){
+    double result;
+    double dx = r[1]-r[0];
+
+    #pragma omp parallel for
+    for (int i = 1; i < r.size()-1; ++i) {
+        if (i % 2 == 0){
+            result += 2*rho[i]*4*M_PI*r[i]*r[i];
+        }
+        else {
+            result += 4*rho[i]*4*M_PI*r[i]*r[i];
+        }
+    }
+    result += rho[0]+rho[rho.size()-1]*4*M_PI*r[rho.size()-1]*r[rho.size()-1];
+    result *= dx/3;
+
+    return result;
+}
+
+
 
 vector<double> mass_shells(vector<double> x,vector<double> y,vector<double> z,vector<double> m, vector<double> r){
     vector<double> result(r.size(), 0.0);
@@ -99,11 +120,25 @@ vector<double> volume_shells(vector<double> r){
 }
 
 
-void save_file(vector<double> vector1, vector<double> vector2, vector<double> vector3, vector<double> vector4, const std::string &filepath) {
+vector<double> density_average(vector<double> r, vector<double> rho){
+    vector<double> result(r.size(), 0.0);
+
+    result[0] = 0.0;
+
+    #pragma omp parallel for
+    for (int i = 1; i < r.size(); ++i) {
+        result[i] = 3.0*(simpson(r, rho))/(4*M_PI*r[i]*r[i]*r[i]); // This is M(<R)/(4/3 * pi * R^3)
+    }
+
+    return result;
+}
+
+
+void save_file(vector<double> vector1, vector<double> vector2, vector<double> vector3, vector<double> vector4, vector<double> vector5, const std::string &filepath) {
     ofstream outputFile(filepath);
 
     for (int i = 0; i < vector1.size(); i++) {
-        outputFile << vector1[i] << "\t" << vector2[i] << "\t" << vector3[i] << "\t" << vector4[i] << "\n";
+        outputFile << vector1[i] << "\t" << vector2[i] << "\t" << vector3[i] << "\t" << vector4[i] << "\t" << vector5[i] << "\n";
     }
 
     outputFile.close();
@@ -124,15 +159,19 @@ int main() {
     vector<double> masses = mass_shells(x, y, z, m, r);
     vector<double> volumes = volume_shells(r);
     vector<double> densities(r.size());
+    vector<double> density_avg(r.size());
 
     #pragma omp parallel for
     for (int i = 0; i < r.size(); ++i) {
         densities[i] = masses[i]/volumes[i];
     }
+    densities[0] = 0;
+
+    density_avg = density_average(r, densities);
 
     cout << "Saving Output..." << endl;
 
-    save_file(r, masses, volumes, densities, "DM_output.txt");
+    save_file(r, masses, volumes, densities, density_avg, "DM_output.txt");
 
     return 0;
 }
