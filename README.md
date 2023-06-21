@@ -45,3 +45,9 @@ This consists of three files: Two python files and one C++ file. Instructions on
 * Run ```task_1_2_8.py``` to make the plot for tasks 1,2 and 8. The result for task 8 is calculated later, but the result is hardcoded into ```task_1_2_8.py``` to avoid repetition.
 * Make the target ```bonus_DM``` and run it
 * Run ```task3ff.py``` to make neccessary calculations for task 3 through 7
+
+#### Stars Bonus Exercise
+
+This exercise requires that you install the Eigen library for c++!<br><br>
+https://eigen.tuxfamily.org/
+<br>

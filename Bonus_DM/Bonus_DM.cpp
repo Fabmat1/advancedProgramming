@@ -7,7 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <tuple>
-
+#include <iomanip>
 
 using namespace std;
 
@@ -138,7 +138,7 @@ void save_file(vector<double> vector1, vector<double> vector2, vector<double> ve
     ofstream outputFile(filepath);
 
     for (int i = 0; i < vector1.size(); i++) {
-        outputFile << vector1[i] << "\t" << vector2[i] << "\t" << vector3[i] << "\t" << vector4[i] << "\t" << vector5[i] << "\n";
+        outputFile << fixed << setprecision(8) << vector1[i] << "\t" << vector2[i] << "\t" << vector3[i] << "\t" << vector4[i] << "\t" << vector5[i] << "\n";
     }
 
     outputFile.close();
@@ -154,7 +154,7 @@ int main() {
 
     cout << "Calculating..." << endl;
     vector<double> r;
-    r = generate_linspace(500, 0., 300.);
+    r = generate_linspace(5000, 0., 300.);
 
     vector<double> masses = mass_shells(x, y, z, m, r);
     vector<double> volumes = volume_shells(r);
