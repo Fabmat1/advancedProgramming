@@ -51,3 +51,7 @@ This consists of three files: Two python files and one C++ file. Instructions on
 This exercise requires that you install the Eigen library for c++!<br><br>
 https://eigen.tuxfamily.org/
 <br>
+How to use the scripts for this exercise:
+* Move the ```GalaxyFromIllustrisTNG50_Stars_Subhalo521803.txt``` file into the ```Bonus_Stars``` directory
+* Make the target ```bonus_stars``` and run it
+* Run ```bonus_stars_plotting.py``` to create all plots, plots are saved into the Bonus_Stars directory by default
