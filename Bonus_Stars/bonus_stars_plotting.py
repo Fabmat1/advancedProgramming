@@ -41,6 +41,9 @@ def plot_galaxy_2d(pos, m, saveas, figtitle, do_lookback_slice=False, lkbk_times
     ax[0].set_ylabel("y")
     ax[1].set_ylabel("z")
     ax[2].set_ylabel("z")
+    ax[0].set_aspect("equal", adjustable='box')
+    ax[1].set_aspect("equal", adjustable='box')
+    ax[2].set_aspect("equal", adjustable='box')
 
     cax = fig.add_axes([0.92, 0.15, 0.02, 0.7])
 
@@ -56,7 +59,7 @@ def plot_galaxy_2d(pos, m, saveas, figtitle, do_lookback_slice=False, lkbk_times
     fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap="viridis"), cax=cax, label=r'$M_{\odot}$kpc$^{-2}$')
 
     plt.savefig(saveas, dpi=500)
-    plt.show()
+    plt.close()  # plt.show()
 
 
 def pol_cyl_hist(pos, m, saveas, title, do_lookback_slice=False, lkbk_times=None, lkbk_range=None):
@@ -81,6 +84,7 @@ def pol_cyl_hist(pos, m, saveas, title, do_lookback_slice=False, lkbk_times=None
 
     hist /= 2 * np.pi * (bin_edges[1:] - bin_edges[:-1]) / 2 * (bin_edges[1] - bin_edges[0])
 
+    plt.figure(figsize=(4.8*16/9, 4.8))
     plt.bar(bin_edges[:-1], hist, width=np.diff(bin_edges), align='edge', color="salmon", edgecolor="darkred")
     plt.title(title)
     plt.xlabel("Radius $r$ [kpc]")
@@ -88,12 +92,13 @@ def pol_cyl_hist(pos, m, saveas, title, do_lookback_slice=False, lkbk_times=None
     plt.semilogy()
     plt.tight_layout()
     plt.savefig(saveas, dpi=300)
-    plt.show()
+    plt.close()  # plt.show()
 
 
 def plot_SFR(lkbk_time, init_mass, saveas, n_bins):
     dt = np.ptp(lkbk_time.value) / n_bins
 
+    plt.figure(figsize=(4.8*16/9, 4.8))
     plt.hist(lkbk_time.value, weights=init_mass / (dt * u.Gyr).to(u.yr), bins=n_bins, color="lightblue",
              edgecolor="navy")
     plt.title("Star formation history for the simulated galaxy")
@@ -101,7 +106,7 @@ def plot_SFR(lkbk_time, init_mass, saveas, n_bins):
     plt.xlabel("Lookback time [Gyr]")
     plt.xlim(14, 0)
     plt.savefig(saveas, dpi=300)
-    plt.show()
+    plt.close()  # plt.show()
 
 
 if __name__ == "__main__":
@@ -148,14 +153,14 @@ if __name__ == "__main__":
                    "Task 9.3: 2d slices of the stellar density, for lookback times 6Gyr < t < 10Gyr.",
                    True, lkbk_time.value, (6, 10))
 
-    pol_cyl_hist(pos, m, "task_10.1_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,"
+    pol_cyl_hist(pos, m, "task_10.1_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,\n"
                                                " for lookback times 0Gyr < t < 2Gyr.", True, lkbk_time.value, (0, 2))
 
-    pol_cyl_hist(pos, m, "task_10.2_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,"
+    pol_cyl_hist(pos, m, "task_10.2_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,\n"
                                                " for lookback times 2Gyr < t < 4Gyr.", True, lkbk_time.value, (2, 4))
 
-    pol_cyl_hist(pos, m, "task_10.3_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,"
+    pol_cyl_hist(pos, m, "task_10.3_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,\n"
                                                " for lookback times 4Gyr < t < 6Gyr.", True, lkbk_time.value, (4, 6))
 
-    pol_cyl_hist(pos, m, "task_10.4_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,"
+    pol_cyl_hist(pos, m, "task_10.4_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,\n"
                                                " for lookback times 6Gyr < t < 10Gyr.", True, lkbk_time.value, (6, 10))
