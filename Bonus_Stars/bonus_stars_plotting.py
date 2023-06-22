@@ -6,7 +6,6 @@ from astropy.cosmology import Planck15
 import astropy.units as u
 
 
-# Task 1/2/3
 def plot_galaxy_2d(pos, m, saveas, figtitle, do_lookback_slice=False, lkbk_times=None, lkbk_range=None):
     fig, ax = plt.subplots(1, 3, figsize=(15, 5))
 
@@ -17,11 +16,14 @@ def plot_galaxy_2d(pos, m, saveas, figtitle, do_lookback_slice=False, lkbk_times
     if do_lookback_slice:
         mask = np.logical_and(lkbk_times > lkbk_range[0], lkbk_times < lkbk_range[1])
         m = m[mask]
-        h0 = ax[0].hist2d(pos[:, 0][mask], pos[:, 1][mask], weights=m, bins=600, cmin=0, range=np.array([(-25, 25), (-25, 25)]),
+        h0 = ax[0].hist2d(pos[:, 0][mask], pos[:, 1][mask], weights=m, bins=600, cmin=0,
+                          range=np.array([(-25, 25), (-25, 25)]),
                           cmap=my_cmap)
-        h1 = ax[1].hist2d(pos[:, 0][mask], pos[:, 2][mask], weights=m, bins=600, cmin=0, range=np.array([(-25, 25), (-25, 25)]),
+        h1 = ax[1].hist2d(pos[:, 0][mask], pos[:, 2][mask], weights=m, bins=600, cmin=0,
+                          range=np.array([(-25, 25), (-25, 25)]),
                           cmap=my_cmap)
-        h2 = ax[2].hist2d(pos[:, 1][mask], pos[:, 2][mask], weights=m, bins=600, cmin=0, range=np.array([(-25, 25), (-25, 25)]),
+        h2 = ax[2].hist2d(pos[:, 1][mask], pos[:, 2][mask], weights=m, bins=600, cmin=0,
+                          range=np.array([(-25, 25), (-25, 25)]),
                           cmap=my_cmap)
 
     else:
@@ -47,11 +49,9 @@ def plot_galaxy_2d(pos, m, saveas, figtitle, do_lookback_slice=False, lkbk_times
     norm = mpl.colors.LogNorm(vmin=np.min(normmatrix[normmatrix != 0]),
                               vmax=np.max(normmatrix))
 
-
     # A loop. So space-efficient.
     for h in [h0, h1, h2]:
         h[3].norm = norm
-
 
     fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap="viridis"), cax=cax, label=r'$M_{\odot}$kpc$^{-2}$')
 
@@ -59,19 +59,30 @@ def plot_galaxy_2d(pos, m, saveas, figtitle, do_lookback_slice=False, lkbk_times
     plt.show()
 
 
-def pol_cyl_hist(pos, saveas, do_lookback_slice=False, lkbk_times=None, lkbk_range=None):
-    x = pos[:, 0]
-    y = pos[:, 1]
-    z = pos[:, 2]
+def pol_cyl_hist(pos, m, saveas, title, do_lookback_slice=False, lkbk_times=None, lkbk_range=None):
+    if do_lookback_slice:
+        mask = np.logical_and(lkbk_times > lkbk_range[0], lkbk_times < lkbk_range[1])
 
-    radial_dist = np.sqrt(y**2 + z**2)
+        x = pos[:, 0][mask]
+        y = pos[:, 1][mask]
+        z = pos[:, 2][mask]
 
-    hist, bin_edges = np.histogram(radial_dist, bins=20, weights=m)
+        radial_dist = np.sqrt(y ** 2 + z ** 2)
 
-    hist /= 2*np.pi*(bin_edges[1:]-bin_edges[:-1])/2*(bin_edges[1]-bin_edges[0])
+        hist, bin_edges = np.histogram(radial_dist, bins=20, weights=m[mask])
+    else:
+        x = pos[:, 0]
+        y = pos[:, 1]
+        z = pos[:, 2]
+
+        radial_dist = np.sqrt(y ** 2 + z ** 2)
+
+        hist, bin_edges = np.histogram(radial_dist, bins=20, weights=m)
+
+    hist /= 2 * np.pi * (bin_edges[1:] - bin_edges[:-1]) / 2 * (bin_edges[1] - bin_edges[0])
 
     plt.bar(bin_edges[:-1], hist, width=np.diff(bin_edges), align='edge', color="salmon", edgecolor="darkred")
-    plt.title("Polar/cylindrical shell histogram of the stellar mass distribution")
+    plt.title(title)
     plt.xlabel("Radius $r$ [kpc]")
     plt.ylabel("Surface density [$M_{\odot}$kpc$^{-2}$]")
     plt.semilogy()
@@ -81,9 +92,10 @@ def pol_cyl_hist(pos, saveas, do_lookback_slice=False, lkbk_times=None, lkbk_ran
 
 
 def plot_SFR(lkbk_time, init_mass, saveas, n_bins):
-    dt = np.ptp(lkbk_time.value)/n_bins
+    dt = np.ptp(lkbk_time.value) / n_bins
 
-    plt.hist(lkbk_time.value, weights=init_mass/(dt*u.Gyr).to(u.yr), bins=n_bins, color="lightblue", edgecolor="navy")
+    plt.hist(lkbk_time.value, weights=init_mass / (dt * u.Gyr).to(u.yr), bins=n_bins, color="lightblue",
+             edgecolor="navy")
     plt.title("Star formation history for the simulated galaxy")
     plt.ylabel("SFR [$M_{\odot}$yr$^{-1}$]")
     plt.xlabel("Lookback time [Gyr]")
@@ -111,7 +123,7 @@ if __name__ == "__main__":
 
     plot_galaxy_2d(pos, m, "task_2_plot.png", "Task 2: 2d slices of the stellar density, with aligned axes.")
 
-    pol_cyl_hist(pos, "task_5_plot.png")
+    pol_cyl_hist(pos, m, "task_5_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution")
 
     redshift = arr[:, 5]
     init_mass = arr[:, 4]
@@ -136,10 +148,14 @@ if __name__ == "__main__":
                    "Task 9.3: 2d slices of the stellar density, for lookback times 6Gyr < t < 10Gyr.",
                    True, lkbk_time.value, (6, 10))
 
+    pol_cyl_hist(pos, m, "task_10.1_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,"
+                                               " for lookback times 0Gyr < t < 2Gyr.", True, lkbk_time.value, (0, 2))
 
+    pol_cyl_hist(pos, m, "task_10.2_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,"
+                                               " for lookback times 2Gyr < t < 4Gyr.", True, lkbk_time.value, (2, 4))
 
+    pol_cyl_hist(pos, m, "task_10.3_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,"
+                                               " for lookback times 4Gyr < t < 6Gyr.", True, lkbk_time.value, (4, 6))
 
-
-
-
-
+    pol_cyl_hist(pos, m, "task_10.4_plot.png", "Polar/cylindrical shell histogram of the stellar mass distribution,"
+                                               " for lookback times 6Gyr < t < 10Gyr.", True, lkbk_time.value, (6, 10))
