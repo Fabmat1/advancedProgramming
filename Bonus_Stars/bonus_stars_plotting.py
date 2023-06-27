@@ -82,7 +82,7 @@ def pol_cyl_hist(pos, m, saveas, title, do_lookback_slice=False, lkbk_times=None
 
         hist, bin_edges = np.histogram(radial_dist, bins=20, weights=m)
 
-    hist /= 2 * np.pi * (bin_edges[1:] - bin_edges[:-1]) / 2 * (bin_edges[1] - bin_edges[0])
+    hist /= 2 * np.pi * (bin_edges[1:] + bin_edges[:-1]) / 2 * (bin_edges[1] - bin_edges[0])
 
     plt.figure(figsize=(4.8*16/9, 4.8))
     plt.bar(bin_edges[:-1], hist, width=np.diff(bin_edges), align='edge', color="salmon", edgecolor="darkred")
