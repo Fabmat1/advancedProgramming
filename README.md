@@ -55,3 +55,8 @@ How to use the scripts for this exercise:
 * Move the ```GalaxyFromIllustrisTNG50_Stars_Subhalo521803.txt``` file into the ```Bonus_Stars``` directory
 * Make the target ```bonus_stars``` and run it
 * Run ```bonus_stars_plotting.py``` to create all plots, plots are saved into the Bonus_Stars directory by default
+
+#### Exercise 3: N-Body Simulations
+
+* Make the target ```quickNbody``` and run it
+* Run ```Nbody_sims.py``` to create all plots

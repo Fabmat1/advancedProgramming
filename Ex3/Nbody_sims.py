@@ -77,8 +77,11 @@ os.makedirs("output/", exist_ok=True)
 
 print("Analyzing C++ results...")
 
-makeplots_cpp("../output/cpp_Nbody_coords.csv", 0.1)
-generate_video_from_images("output", "cpp_plot", "animation_cpp.mp4")
+try:
+    makeplots_cpp("../output/cpp_Nbody_coords.csv", 0.1)
+    generate_video_from_images("output", "cpp_plot", "animation_cpp.mp4")
+except:
+    print("Please build and execute the C++ target 'quickNbody' before executing this script!")
 
 print("Running the Simulation with dt = 0.01; T_max = 30; N = 512...")
 
